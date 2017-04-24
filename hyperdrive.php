@@ -15,28 +15,14 @@
  * License:     GPL-3.0
  * License URI: https://github.com/wp-id/hyperdrive/LICENSE
  */
-
 namespace hyperdrive;
-
 add_action('wp_head', __NAMESPACE__ .'\engage');
-
-/**
- * Gets scripts registered and enqueued.
- *
- * @since Hyperdrive 1.0.0
- * @return array(_WP_Dependency) A list of enqueued dependencies
- */
-function get_enqueued_scripts() {
-  global $wp_scripts;
-  foreach ( $wp_scripts->queue as $handle ) {
-    $enqueued_scripts[] = $wp_scripts->registered[ $handle ];
-  }
-  return $enqueued_scripts;
-}
 
 /**
  * Gets dependency data recursively.
  *
+ * @uses get_deps_for_handle
+ * @uses get_src_for_handle
  * @since Hyperdrive 1.0.0
  * @param array(string) $handles An array of handles
  * @return array(array) Dependency data matching expected structure
@@ -65,12 +51,14 @@ function get_dependency_data( $handles ) {
 }
 
 /**
- * Prepare structured data for Fetch Injection.
+ * Prepare structured destination data for Fetch Injection.
  *
+ * @uses get_dependency_data
+ * @uses get_enqueued_scripts
  * @since Hyperdrive 1.0.0
- * @return Associative array containing data
+ * @return Associative array containing destination data
  *
- * Example return value:
+ * Example destination data:
  *
  * array(
  *   string "jquery-scrollto"
@@ -94,32 +82,51 @@ function get_dependency_data( $handles ) {
  * )
  *
  */
-function get_script_data() {
-  $script_data = [];
+function set_destination() {
+  $destination_data = [];
   $scripts = get_enqueued_scripts();
   foreach ( $scripts as $script ) {
     if ( !$script->extra[ 'conditional' ] ) {
       // exclude scripts using conditional comments
       // Internet Explorer will never support fetch
-      $script_data[] = array(
+      $destination_data[] = array(
         $script->handle,
         get_src_for_handle( $script->handle ),
         map_dependencies( $script->deps )
       );
     }
   }
-  return $script_data;
+  return $destination_data;
+}
+
+/**
+ * Creates Fetch Injection sequencing script.
+ *
+ * @since Hyperdrive 1.0.0
+ * @param array(array(array)) $coordinates Destination coordinates
+ */
+function calibrate_thrusters( $coordinates ) {
+  return;
+}
+
+/**
+ * Not really sure yet... :)~
+ */
+function bend_spacetime() {
+  return;
 }
 
 /**
  * Main function engages the hyperdrive.
- * Hook into wp_head for optimal performance.
+ * Hook into `wp_head` for optimal performance.
  *
  * @since Hyperdrive 1.0.0
  */
 function engage() {
-  $script_data = get_script_data();
-  foreach ( $script_data as $data ) {
+  $destination_coordinates = set_destination();
+  $antimatter_particles = calibrate_thrusters( $destination_coordinates );
+  bend_spacetime( $antimatter_particles );
+  foreach ( $destination_coordinates as $data ) {
     d($data);
   }
   ddd($script_data);
@@ -127,6 +134,20 @@ function engage() {
 
 // UTILITY FUNCTIONS
 // -----------------
+
+/**
+ * Gets scripts registered and enqueued.
+ *
+ * @since Hyperdrive 1.0.0
+ * @return array(_WP_Dependency) A list of enqueued dependencies
+ */
+function get_enqueued_scripts() {
+  global $wp_scripts;
+  foreach ( $wp_scripts->queue as $handle ) {
+    $enqueued_scripts[] = $wp_scripts->registered[ $handle ];
+  }
+  return $enqueued_scripts;
+}
 
 /**
  * Gets a script dependency for a handle

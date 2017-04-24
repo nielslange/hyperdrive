@@ -3,7 +3,8 @@
  * Put your WordPress pages loads into Hyperdrive.
  *
  * @package     Hyperdrive
- * @author      WordCamp Ubud 2017
+ * @author      WordCamp Ubud 2017 Plugin Team
+ * @link        https://wordpress.stackexchange.com/a/263733/117731
  * @license     GPL-3.0
  *
  * @wordpress-plugin
@@ -15,7 +16,7 @@
  * License:     GPL-3.0
  * License URI: https://github.com/wp-id/hyperdrive/LICENSE
  */
-namespace hyperdrive;
+namespace wcubud;
 add_action('wp_head', __NAMESPACE__ .'\engage');
 
 /**
@@ -103,21 +104,32 @@ function calibrate_thrusters() {
 }
 
 /**
- * Creates Fetch Injection sequencing scripts using "Calibration data".
- * Inverts control away from `wp_enqueue_script`.
- * Ensures deep dependencies only called once.
- * Data structure must be accurate or proper calibration.
+ * Prepares "Calibration data" for Fetch Injection, deduping along the way.
  *
  * @since Hyperdrive 1.0.0
  * @param array(array(...)) $calibration_data Destination coordinates
+ * @param boolean [$recursing=false] True when generating subparticles
  * @return A list of scripts for use in Fetch Injection
  */
-function generate_antimatter( $calibration_data ) {
+function generate_antimatter( $calibration_data, $recursing = false ) {
   $antimatter_particles = [];
   foreach ( $calibration_data as $idx => $data ) {
-    $url = $data[1]; // assumed structure
+    $handle = $data[0];
+    $url = $data[1];
     $antimatter_particles[] = "{$url}";
+    $subparticles = $data[2];
+    if ( $subparticles ) {
+      $antimatter_particles[] = generate_antimatter( $subparticles, true );
+    }
   }
+  // move nested arrays to end
+  array_multisort( $antimatter_particles );
+  // remove duplicate values
+  $antimatter_particles = array_map(
+    'unserialize', array_unique(
+      array_map( 'serialize', $antimatter_particles )
+    )
+  );
   return $antimatter_particles;
 }
 
@@ -129,9 +141,22 @@ function generate_antimatter( $calibration_data ) {
  *     for Fetch Injection.
  */
 function fold_spacetime( $antimatter_particles ) {
+  // $accumulator = [];
+  // function walk_recursive( $array, $accumulator ) {
+  //   array_walk( $array, function( $item ) use( &$accumulator ) {
+  //     $is_array = is_array( $item );
+  //     if ( $is_array ) {
+  //       walk_recursive( $item, $accumulator );
+  //     } else {
+  //       $accumulator[] = $item;
+  //     }
+  //   });
+  //   d($accumulator);
+  //   return $accumulator;
+  // }
+  // $accumulator = walk_recursive( $antimatter_particles, $accumulator );
   // d($antimatter_particles);
-  // TODO: fold space until we have all particle arrays
-  $particle_array = json_encode($antimatter_particles);
+  $particle_array = json_encode($antimatter_particles, JSON_UNESCAPED_SLASHES);
   d($particle_array);
   return <<<EOD
 (function () {
@@ -142,7 +167,7 @@ function fold_spacetime( $antimatter_particles ) {
    * @licence ISC
    */
   var fetchInject=function(){"use strict";const e=function(e,t,n,r,o,i,c){i=t.createElement(n),c=t.getElementsByTagName(n)[0],i.type=r.blob.type,i.appendChild(t.createTextNode(r.text)),i.onload=o(r),c?c.parentNode.insertBefore(i,c):t.head.appendChild(i)},t=function(t,n){if(!t||!Array.isArray(t))return Promise.reject(new Error("`inputs` must be an array"));if(n&&!(n instanceof Promise))return Promise.reject(new Error("`promise` must be a promise"));const r=[],o=n?[].concat(n):[],i=[];return t.forEach(e=>o.push(window.fetch(e).then(e=>{return[e.clone().text(),e.blob()]}).then(e=>{return Promise.all(e).then(e=>{r.push({text:e[0],blob:e[1]})})}))),Promise.all(o).then(()=>{return r.forEach(t=>{i.push({then:n=>{"text/css"===t.blob.type?e(window,document,"style",t,n):e(window,document,"script",t,n)}})}),Promise.all(i)})};return t}();
-  fetchInject($particle_array)
+  fetchInject($particle_array);
 })();
 EOD;
 }

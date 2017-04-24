@@ -59,9 +59,9 @@ function get_dependency_data( $handles ) {
  * @since Hyperdrive 1.0.0
  * @return Associative array containing structured data. Data
  *     structure is assumed by functions using and used by this
- *     method and must be udpated if the data structure changes.
+ *     method and must be udpated if data structure changes.
  *
- * Example structured data ("Destination coordinates"):
+ * Example structured data ("Calibration data"):
  *
  * array(
  *   string "jquery-scrollto"
@@ -85,55 +85,96 @@ function get_dependency_data( $handles ) {
  * )
  *
  */
-function set_destination() {
-  $destination_data = [];
+function calibrate_thrusters() {
+  $calibration_data = [];
   $scripts = get_enqueued_scripts();
   foreach ( $scripts as $script ) {
     if ( !$script->extra[ 'conditional' ] ) {
       // exclude scripts using conditional comments
       // Internet Explorer will never support fetch
-      $destination_data[] = array(
+      $calibration_data[] = array(
         $script->handle,
         get_src_for_handle( $script->handle ),
-        map_dependencies( $script->deps )
+        get_dependency_data( $script->deps )
       );
     }
   }
-  return $destination_data;
+  return $calibration_data;
 }
 
 /**
- * Creates Fetch Injection sequencing script using structured data.
+ * Creates Fetch Injection sequencing scripts using "Calibration data".
+ * Inverts control away from `wp_enqueue_script`.
+ * Ensures deep dependencies only called once.
  * Data structure must be accurate or proper calibration.
  *
  * @since Hyperdrive 1.0.0
- * @param array(array(array)) $coordinates Destination coordinates
+ * @param array(array(...)) $calibration_data Destination coordinates
+ * @return A list of scripts for use in Fetch Injection
  */
-function calibrate_thrusters( $coordinates ) {
-  return;
+function generate_antimatter( $calibration_data ) {
+  $antimatter_particles = [];
+  foreach ( $calibration_data as $idx => $data ) {
+    $url = $data[1]; // assumed structure
+    $antimatter_particles[] = "{$url}";
+  }
+  return $antimatter_particles;
+}
+
+/**
+ * Converts antimatter particles into dark matter.
+ *
+ * @param array $antimatter_particles Array of particles
+ * @return A string containing a fully-assembled inline script
+ *     for Fetch Injection.
+ */
+function fold_spacetime( $antimatter_particles ) {
+  // d($antimatter_particles);
+  // TODO: fold space until we have all particle arrays
+  $particle_array = json_encode($antimatter_particles);
+  d($particle_array);
+  return <<<EOD
+(function () {
+  if (!window.fetch) return;
+  /**
+   * Fetch Inject v1.6.8
+   * Copyright (c) 2017 Josh Habdas
+   * @licence ISC
+   */
+  var fetchInject=function(){"use strict";const e=function(e,t,n,r,o,i,c){i=t.createElement(n),c=t.getElementsByTagName(n)[0],i.type=r.blob.type,i.appendChild(t.createTextNode(r.text)),i.onload=o(r),c?c.parentNode.insertBefore(i,c):t.head.appendChild(i)},t=function(t,n){if(!t||!Array.isArray(t))return Promise.reject(new Error("`inputs` must be an array"));if(n&&!(n instanceof Promise))return Promise.reject(new Error("`promise` must be a promise"));const r=[],o=n?[].concat(n):[],i=[];return t.forEach(e=>o.push(window.fetch(e).then(e=>{return[e.clone().text(),e.blob()]}).then(e=>{return Promise.all(e).then(e=>{r.push({text:e[0],blob:e[1]})})}))),Promise.all(o).then(()=>{return r.forEach(t=>{i.push({then:n=>{"text/css"===t.blob.type?e(window,document,"style",t,n):e(window,document,"script",t,n)}})}),Promise.all(i)})};return t}();
+  fetchInject($particle_array)
+})();
+EOD;
 }
 
 /**
  * Echos an inline script into the document.
  *
  * @since Hyperdrive 1.0.0
- * @param string $antimatter_particles An inline script
+ * @param string $dark_energy An inline script to asynchronously
+ *     fetch previously enqueued page resources.
  */
-function fold_spacetime( $antimatter_particles ) {
-  echo "<script>{$antimatter_particles}</script>";
+function enter_hyperspace( $dark_energy ) {
+  echo "<script>{$dark_energy}</script>";
 }
 
 /**
  * Main function engages the hyperdrive.
- * Hook into `wp_head` for optimal performance.
+ * Hook into `wp_head` for optimum performance.
  *
+ * @uses calibrate_thrusters
+ * @uses generate_antimatter
+ * @uses fold_spacetime
+ * @uses enter_hyperspace
  * @since Hyperdrive 1.0.0
  */
 function engage() {
-  $destination_coordinates = set_destination();
-  $antimatter_particles = calibrate_thrusters( $destination_coordinates );
-  fold_spacetime( $antimatter_particles );
-  ddd('abend');
+  $calibration_data = calibrate_thrusters();
+  $antimatter_particles = generate_antimatter( $calibration_data );
+  $dark_energy = fold_spacetime( $antimatter_particles );
+  d($dark_energy);
+  // enter_hyperspace( $dark_energy );
+  ddd('end');
 }
 
 // UTILITY FUNCTIONS

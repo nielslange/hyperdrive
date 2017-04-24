@@ -43,7 +43,7 @@ function get_dependency_data( $handles ) {
       $dependency_data[] = array(
         $handle,
         '', // maintain consistency
-        get_dependency_data( $deps ),
+        get_dependency_data( $deps )
       );
     }
   }
@@ -51,14 +51,17 @@ function get_dependency_data( $handles ) {
 }
 
 /**
- * Prepare structured destination data for Fetch Injection.
+ * Prepare structured data for Fetch Injection.
  *
  * @uses get_dependency_data
  * @uses get_enqueued_scripts
+ * @uses get_src_for_handle
  * @since Hyperdrive 1.0.0
- * @return Associative array containing destination data
+ * @return Associative array containing structured data. Data
+ *     structure is assumed by functions using and used by this
+ *     method and must be udpated if the data structure changes.
  *
- * Example destination data:
+ * Example structured data ("Destination coordinates"):
  *
  * array(
  *   string "jquery-scrollto"
@@ -100,7 +103,8 @@ function set_destination() {
 }
 
 /**
- * Creates Fetch Injection sequencing script.
+ * Creates Fetch Injection sequencing script using structured data.
+ * Data structure must be accurate or proper calibration.
  *
  * @since Hyperdrive 1.0.0
  * @param array(array(array)) $coordinates Destination coordinates
@@ -110,10 +114,13 @@ function calibrate_thrusters( $coordinates ) {
 }
 
 /**
- * Not really sure yet... :)~
+ * Echos an inline script into the document.
+ *
+ * @since Hyperdrive 1.0.0
+ * @param string $antimatter_particles An inline script
  */
-function bend_spacetime() {
-  return;
+function fold_spacetime( $antimatter_particles ) {
+  echo "<script>{$antimatter_particles}</script>";
 }
 
 /**
@@ -125,11 +132,8 @@ function bend_spacetime() {
 function engage() {
   $destination_coordinates = set_destination();
   $antimatter_particles = calibrate_thrusters( $destination_coordinates );
-  bend_spacetime( $antimatter_particles );
-  foreach ( $destination_coordinates as $data ) {
-    d($data);
-  }
-  ddd($script_data);
+  fold_spacetime( $antimatter_particles );
+  ddd('abend');
 }
 
 // UTILITY FUNCTIONS

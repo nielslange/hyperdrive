@@ -39,7 +39,7 @@ function get_enqueued_scripts() {
  *
  * @since Hyperdrive 1.0.0
  * @param array(string) $handles An array of handles
- * @return
+ * @return array(array) Dependency data matching expected structure
  */
 function get_dependency_data( $handles ) {
   $dependency_data = [];

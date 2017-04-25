@@ -141,21 +141,36 @@ function generate_antimatter( $calibration_data, $recursing = false ) {
  *     for Fetch Injection.
  */
 function fold_spacetime( $antimatter_particles ) {
-  // $accumulator = [];
-  // function walk_recursive( $array, $accumulator ) {
-  //   array_walk( $array, function( $item ) use( &$accumulator ) {
-  //     $is_array = is_array( $item );
-  //     if ( $is_array ) {
-  //       walk_recursive( $item, $accumulator );
-  //     } else {
-  //       $accumulator[] = $item;
-  //     }
-  //   });
-  //   d($accumulator);
-  //   return $accumulator;
-  // }
-  // $accumulator = walk_recursive( $antimatter_particles, $accumulator );
-  // d($antimatter_particles);
+  $injectors = [];
+
+  function walk_recursive( $array, $accumulator, &$injectors, &$injection_json = '') {
+    $accumulator = [];
+    array_walk( $array, function( $item ) use( &$accumulator, &$injectors, &$injection_json ) {
+      $is_array = is_array( $item );
+      if ( $is_array ) {
+        walk_recursive( $item, $accumulator, $injectors, $injection_json );
+      } else {
+        $accumulator[] = $item;
+      }
+    });
+    $injection_json = json_encode($accumulator, JSON_UNESCAPED_SLASHES);
+    // d($injection_json);
+    $injectors[] = $injection_json;
+    // d($injectors);
+  }
+  walk_recursive( $antimatter_particles, $accumulator, $injectors );
+
+  $string = '';
+  foreach ($injectors as $idx => $injector) {
+    $string = end($injectors) === $injector
+      ? "fetchInject($injector, $string)"
+      : "$string, fetchInject($injector";
+  }
+  // $end = end($injectors);
+  // d($end);
+  d($string);
+
+
   $particle_array = json_encode($antimatter_particles, JSON_UNESCAPED_SLASHES);
   d($particle_array);
   return <<<EOD
@@ -171,6 +186,24 @@ function fold_spacetime( $antimatter_particles ) {
 })();
 EOD;
 }
+
+// $wormhole = [];
+// function walk_recursive( $array, $accumulator, &$wormhole ) {
+//   $accumulator = [];
+//   array_walk( $array, function( $item ) use( &$accumulator, &$wormhole ) {
+//     $is_array = is_array( $item );
+//     if ( $is_array ) {
+//       walk_recursive( $item, $accumulator, $wormhole );
+//     } else {
+//       $accumulator[] = $item;
+//     }
+//   });
+//   $wormhole = [array_merge_recursive($wormhole, $accumulator)];
+//   d($wormhole);
+//   d($accumulator);
+//   // return $accumulator;
+// }
+// walk_recursive( $antimatter_particles, $accumulator, $wormhole );
 
 /**
  * Echos an inline script into the document.

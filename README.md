@@ -6,7 +6,7 @@
 
 # Todo before 1.0.0 release
 
-- [ ] Only dequeue scripts if [browser supports Fetch](http://caniuse.com/#search=fetch) for backwards compatability with older browsers
+- [ ] Only dequeue scripts if [browser supports Fetch](http://caniuse.com/#search=fetch) for backwards compatibility with older browsers
 - [ ] Integrate localization behaviors [as shown here](https://gist.github.com/jhabdas/64e8380010e43a526fb9c9ee511fad17#file-functions-php-L507).
 - [ ] Test with a few different themes and open bugs and needed
 

@@ -11,7 +11,7 @@
  * Plugin Name: Hyperdrive
  * Plugin URI:  https://github.com/wp-id/hyperdrive
  * Description: The fastest way to load pages in WordPress.
- * Version:     1.0.0
+ * Version:     1.0.0-beta
  * Author:      WordCamp Ubud 2017 Plugin Team
  * License:     GPL-3.0
  * License URI: https://github.com/wp-id/hyperdrive/LICENSE
@@ -30,7 +30,7 @@ add_action('wp_head', __NAMESPACE__ .'\engage');
  */
 function get_dependency_data( $handles ) {
   $dependency_data = [];
-  foreach ( $handles as $foo => $handle ) {
+  foreach ( $handles as $idx => $handle ) {
     $source_url = get_src_for_handle( $handle );
     if ( $source_url ) {
       $dependency_data[] = array(
@@ -53,6 +53,7 @@ function get_dependency_data( $handles ) {
 
 /**
  * Prepare structured data for Fetch Injection.
+ * Also dequeues enqueued scripts so WordPress doesn't load them.
  *
  * @uses get_dependency_data
  * @uses get_enqueued_scripts
@@ -98,13 +99,16 @@ function calibrate_thrusters() {
         get_src_for_handle( $script->handle ),
         get_dependency_data( $script->deps )
       );
+      // we'll take it from here
+      wp_dequeue_script( $script->handle );
     }
   }
   return $calibration_data;
 }
 
 /**
- * Prepares "Calibration data" for Fetch Injection, deduping along the way.
+ * Prepares "Calibration data" for Fetch Injection.
+ * Dedupes associative array and respect sort order.
  *
  * @since Hyperdrive 1.0.0
  * @param array(array(...)) $calibration_data Destination coordinates
@@ -112,37 +116,41 @@ function calibrate_thrusters() {
  * @return A list of scripts for use in Fetch Injection
  */
 function generate_antimatter( $calibration_data, $recursing = false ) {
-  $antimatter_particles = [];
+  $particle_array = [];
   foreach ( $calibration_data as $idx => $data ) {
     $handle = $data[0];
     $url = $data[1];
-    $antimatter_particles[] = "{$url}";
+    $particle_array[] = "{$url}";
     $subparticles = $data[2];
     if ( $subparticles ) {
-      $antimatter_particles[] = generate_antimatter( $subparticles, true );
+      $particle_array[] = generate_antimatter( $subparticles, true );
     }
   }
-  // move nested arrays to end
-  array_multisort( $antimatter_particles );
+  d($calibration_data);
+  array_multisort( $particle_array ); // remove numeric array keys
   // remove duplicate values
-  $antimatter_particles = array_map(
+  $particle_array = array_map(
     'unserialize', array_unique(
-      array_map( 'serialize', $antimatter_particles )
+      array_map( 'serialize', $particle_array )
     )
   );
-  return $antimatter_particles;
+  return $particle_array;
 }
 
 /**
  * Converts antimatter particles into dark matter.
  *
- * @param array $antimatter_particles Array of particles
+ * @since Hyperdrive 1.0.0
+ * @link https://github.com/jhabdas/fetch-inject
+ * @param array $antimatter_particles Partical array
  * @return A string containing a fully-assembled inline script
  *     for Fetch Injection.
  */
 function fold_spacetime( $antimatter_particles ) {
   $injectors = [];
+  $fetch_inject_string = '';
 
+  // create ordered array of JSON encoded strings for Fetch Injection
   function walk_recursive( $array, $accumulator, &$injectors, &$injection_json = '') {
     $accumulator = [];
     array_walk( $array, function( $item ) use( &$accumulator, &$injectors, &$injection_json ) {
@@ -154,25 +162,26 @@ function fold_spacetime( $antimatter_particles ) {
       }
     });
     $injection_json = json_encode($accumulator, JSON_UNESCAPED_SLASHES);
-    // d($injection_json);
     $injectors[] = $injection_json;
-    // d($injectors);
   }
-  walk_recursive( $antimatter_particles, $accumulator, $injectors );
+  walk_recursive( $antimatter_particles, FALSE, $injectors );
 
-  $string = '';
+  // assemble Fetch Inject string using ordered array
+  $first_element = array_shift(array_values($injectors));
+  $last_element = end($injectors);
   foreach ($injectors as $idx => $injector) {
-    $string = end($injectors) === $injector
-      ? "fetchInject($injector, $string)"
-      : "$string, fetchInject($injector";
+    if ( $injector === $first_element ) {
+      $fetch_inject_string = "fetchInject($injector)";
+    } else if ( $injector === $last_element ) {
+      $fetch_inject_string = "fetchInject($injector, $fetch_inject_string)";
+    } else {
+      $array_with_empty_string = array(''); // like WordPress core jquery handle
+      if ( !(json_decode($injector) === $array_with_empty_string) ) {
+        $fetch_inject_string = "fetchInject($injector, $fetch_inject_string)";
+      }
+    }
   }
-  // $end = end($injectors);
-  // d($end);
-  d($string);
 
-
-  $particle_array = json_encode($antimatter_particles, JSON_UNESCAPED_SLASHES);
-  d($particle_array);
   return <<<EOD
 (function () {
   if (!window.fetch) return;
@@ -182,28 +191,10 @@ function fold_spacetime( $antimatter_particles ) {
    * @licence ISC
    */
   var fetchInject=function(){"use strict";const e=function(e,t,n,r,o,i,c){i=t.createElement(n),c=t.getElementsByTagName(n)[0],i.type=r.blob.type,i.appendChild(t.createTextNode(r.text)),i.onload=o(r),c?c.parentNode.insertBefore(i,c):t.head.appendChild(i)},t=function(t,n){if(!t||!Array.isArray(t))return Promise.reject(new Error("`inputs` must be an array"));if(n&&!(n instanceof Promise))return Promise.reject(new Error("`promise` must be a promise"));const r=[],o=n?[].concat(n):[],i=[];return t.forEach(e=>o.push(window.fetch(e).then(e=>{return[e.clone().text(),e.blob()]}).then(e=>{return Promise.all(e).then(e=>{r.push({text:e[0],blob:e[1]})})}))),Promise.all(o).then(()=>{return r.forEach(t=>{i.push({then:n=>{"text/css"===t.blob.type?e(window,document,"style",t,n):e(window,document,"script",t,n)}})}),Promise.all(i)})};return t}();
-  fetchInject($particle_array);
+  $fetch_inject_string;
 })();
 EOD;
 }
-
-// $wormhole = [];
-// function walk_recursive( $array, $accumulator, &$wormhole ) {
-//   $accumulator = [];
-//   array_walk( $array, function( $item ) use( &$accumulator, &$wormhole ) {
-//     $is_array = is_array( $item );
-//     if ( $is_array ) {
-//       walk_recursive( $item, $accumulator, $wormhole );
-//     } else {
-//       $accumulator[] = $item;
-//     }
-//   });
-//   $wormhole = [array_merge_recursive($wormhole, $accumulator)];
-//   d($wormhole);
-//   d($accumulator);
-//   // return $accumulator;
-// }
-// walk_recursive( $antimatter_particles, $accumulator, $wormhole );
 
 /**
  * Echos an inline script into the document.
@@ -230,9 +221,9 @@ function engage() {
   $calibration_data = calibrate_thrusters();
   $antimatter_particles = generate_antimatter( $calibration_data );
   $dark_energy = fold_spacetime( $antimatter_particles );
-  d($dark_energy);
-  // enter_hyperspace( $dark_energy );
-  ddd('end');
+  // d($dark_energy);
+  enter_hyperspace( $dark_energy );
+  // ddd('end');
 }
 
 // UTILITY FUNCTIONS

@@ -126,7 +126,6 @@ function generate_antimatter( $calibration_data, $recursing = false ) {
       $particle_array[] = generate_antimatter( $subparticles, true );
     }
   }
-  d($calibration_data);
   array_multisort( $particle_array ); // remove numeric array keys
   // remove duplicate values
   $particle_array = array_map(
@@ -221,9 +220,7 @@ function engage() {
   $calibration_data = calibrate_thrusters();
   $antimatter_particles = generate_antimatter( $calibration_data );
   $dark_energy = fold_spacetime( $antimatter_particles );
-  // d($dark_energy);
   enter_hyperspace( $dark_energy );
-  // ddd('end');
 }
 
 // UTILITY FUNCTIONS

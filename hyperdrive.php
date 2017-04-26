@@ -14,7 +14,7 @@
  * Version:     1.0.0-beta
  * Author:      WordCamp Ubud 2017 Plugin Team
  * License:     GPL-3.0
- * License URI: https://github.com/wp-id/hyperdrive/LICENSE
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  */
 namespace wcubud;
 add_action('wp_head', __NAMESPACE__ .'\engage');

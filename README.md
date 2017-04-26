@@ -28,4 +28,4 @@ Please open issues when creating PRs and PR against the issue to close it. This 
 
 # License
 
-[GPL-3.0](https://github.com/wp-id/hyperdrive/blob/master/LICENSE)
+[GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html)

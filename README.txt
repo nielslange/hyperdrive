@@ -1,5 +1,5 @@
 === Hyperdrive ===
-Contributors: jhabdas, nielslange, omrobbie, shantiscript, ariffsetiawan, ervannur
+Contributors: jhabdas, nielslange, omrobbie, shantiscript, ariffsetiawan, ervannur, ipututoya, ariffsetiawan, auraanar, 3hartanto, ervannur, joedewaweb
 Tags: Performance, Optimization, Fetch Injection, Async Dependencies
 Requires at least: 3.0
 Tested up to: 4.7.4

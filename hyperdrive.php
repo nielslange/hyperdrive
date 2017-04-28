@@ -33,7 +33,8 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  *
  */
-namespace wcubud;
+ 
+namespace hyperdrive;
 add_action('wp_head', __NAMESPACE__ .'\engage');
 
 /**

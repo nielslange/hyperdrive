@@ -13,7 +13,7 @@ The fastest way to load pages in WordPress.
 
 Hyperdrive is a WordPress plugin giving [supporting browsers] (http://caniuse.com/#search=fetch) access to a performance optimization technique known as [Fetch Injection](https://hackcabin.com/post/managing-async-dependencies-javascript/), enabling themes and sites to download resources such as JavaScript and CSS asynchronously and in parallel while preserving execution order.
 
-Using Fetch Injection will reduce perceived latency during page load when compared with traditional methods and has been shown to increase time to initial render by as much as 200-300% for new visitors. Returning visitors are capable of even greater performance gains thanks to modern browser caching techniques such as Service Workers uses in Progressive Web Applications.
+Using Fetch Injection will reduce perceived latency during page load when compared with traditional methods and has been shown to increase time to initial render by as much as 200-300% for new visitors. Returning visitors are capable of even greater performance gains thanks to modern browser caching techniques such as Service Workers, commonly used in Progressive Web Applications.
 
 == Installation ==
 

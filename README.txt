@@ -22,5 +22,6 @@ Using Fetch Injection will reduce perceived latency during page load when compar
 
 == Changelog ==
 
-= 1.0.0-beta =
-* Initial beta pre-release
+### 1.0.0-beta ###
+
+* Initial beta pre-release for testing.

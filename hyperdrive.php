@@ -1,20 +1,37 @@
 <?php
 /**
- * Put your WordPress pages loads into Hyperdrive.
+ * Putting WordPress into Hyperdrive.
  *
  * @package     Hyperdrive
  * @author      WordCamp Ubud 2017 Plugin Team
  * @link        https://wordpress.stackexchange.com/a/263733/117731
- * @license     GPL-3.0
+ * @license     GPL-3.0 or later
  *
  * @wordpress-plugin
  * Plugin Name: Hyperdrive
  * Plugin URI:  https://github.com/wp-id/hyperdrive
  * Description: The fastest way to load pages in WordPress.
  * Version:     1.0.0-beta
- * Author:      WordCamp Ubud 2017 Plugin Team
- * License:     GPL-3.0
- * License URI: https://www.gnu.org/licenses/gpl-3.0.html
+ * Author:      Josh Habdas and contributors
+ * License:     GPL-3.0 or later
+ *
+ * Hyperdrive. The fastest way to load pages in WordPress.
+ * Copyright (C) 2017  Josh Habdas and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see
+ * <https://opensource.org/licenses/GPL-3.0>.
+ *
  */
 namespace wcubud;
 add_action('wp_head', __NAMESPACE__ .'\engage');

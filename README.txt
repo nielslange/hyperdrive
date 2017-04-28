@@ -4,14 +4,14 @@ Tags: Performance, Optimization, Fetch Injection, Async Dependencies
 Requires at least: 3.0
 Tested up to: 4.7.4
 Stable tag: 1.0
-License: GPL-3.0
-License URI: https://www.gnu.org/licenses/gpl-3.0.html
+License: GPL-3.0 or later
+License URI: https://opensource.org/licenses/GPL-3.0
 
 The fastest way to load pages in WordPress.
 
 == Description ==
 
-Hyperdrive uses a performance optimization technique known as [Fetch Injection](https://hackcabin.com/post/managing-async-dependencies-javascript/), available in [browsers with support](http://caniuse.com/#search=fetch) for the Fetch API. Fetch is a modern replacement for Ajax.  
+Hyperdrive uses a performance optimization technique known as [Fetch Injection](https://hackcabin.com/post/managing-async-dependencies-javascript/), available in [browsers with support](http://caniuse.com/#search=fetch) for the Fetch API. Fetch is a modern replacement for Ajax.
 
 == Installation ==
 

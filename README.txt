@@ -3,7 +3,7 @@ Contributors: jhabdas, nielslange, omrobbie, shantiscript, ariffsetiawan, ervann
 Tags: Performance, Optimization, Fetch Injection, Async Dependencies
 Requires at least: 3.0
 Tested up to: 4.7.4
-Stable tag: 1.0
+Stable tag: 0.9
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 

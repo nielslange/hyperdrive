@@ -3,7 +3,7 @@
  * Putting WordPress into Hyperdrive.
  *
  * @package     Hyperdrive
- * @author      WordCamp Ubud 2017 Plugin Team
+ * @author      Josh Habdas and contributors
  * @link        https://wordpress.stackexchange.com/a/263733/117731
  * @license     GPL-3.0 or later
  *
@@ -33,41 +33,9 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  *
  */
- 
+
 namespace hyperdrive;
 add_action('wp_head', __NAMESPACE__ .'\engage');
-
-/**
- * Gets dependency data recursively.
- *
- * @uses get_deps_for_handle
- * @uses get_src_for_handle
- * @since Hyperdrive 1.0.0
- * @param array(string) $handles An array of handles
- * @return array(array) Dependency data matching expected structure
- */
-function get_dependency_data( $handles ) {
-  $dependency_data = [];
-  foreach ( $handles as $idx => $handle ) {
-    $source_url = get_src_for_handle( $handle );
-    if ( $source_url ) {
-      $dependency_data[] = array(
-        $handle,
-        $source_url,
-        array() // maintain consistency
-      );
-    }
-    $deps = get_deps_for_handle( $handle );
-    if ( count($deps) > 0 ) {
-      $dependency_data[] = array(
-        $handle,
-        '', // maintain consistency
-        get_dependency_data( $deps )
-      );
-    }
-  }
-  return $dependency_data;
-}
 
 /**
  * Prepare structured data for Fetch Injection.
@@ -243,6 +211,38 @@ function engage() {
 
 // UTILITY FUNCTIONS
 // -----------------
+
+/**
+ * Gets dependency data recursively.
+ *
+ * @uses get_deps_for_handle
+ * @uses get_src_for_handle
+ * @since Hyperdrive 1.0.0
+ * @param array(string) $handles An array of handles
+ * @return array(array) Dependency data matching expected structure
+ */
+function get_dependency_data( $handles ) {
+  $dependency_data = [];
+  foreach ( $handles as $idx => $handle ) {
+    $source_url = get_src_for_handle( $handle );
+    if ( $source_url ) {
+      $dependency_data[] = array(
+        $handle,
+        $source_url,
+        array() // maintain consistency
+      );
+    }
+    $deps = get_deps_for_handle( $handle );
+    if ( count($deps) > 0 ) {
+      $dependency_data[] = array(
+        $handle,
+        '', // maintain consistency
+        get_dependency_data( $deps )
+      );
+    }
+  }
+  return $dependency_data;
+}
 
 /**
  * Gets scripts registered and enqueued.

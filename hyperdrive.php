@@ -14,6 +14,7 @@
  * Version:     1.0.0-beta
  * Author:      Josh Habdas and contributors
  * License:     GPL-3.0 or later
+ * Text Domain: hyperdrive
  *
  * Hyperdrive. The fastest way to load pages in WordPress.
  * Copyright (C) 2017  Josh Habdas and contributors

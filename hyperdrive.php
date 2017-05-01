@@ -15,6 +15,7 @@
  * Author:      Josh Habdas and contributors
  * License:     GPL-3.0 or later
  * Text Domain: hyperdrive
+ * Domain Path: /languages/
  *
  * Hyperdrive. The fastest way to load pages in WordPress.
  * Copyright (C) 2017  Josh Habdas and contributors
@@ -36,7 +37,19 @@
  */
 
 namespace hyperdrive;
-add_action('wp_head', __NAMESPACE__ .'\engage');
+add_action('plugins_loaded', __NAMESPACE__ .'\calling_houston');
+add_action('wp_head', __NAMESPACE__ .'\calling_houston');
+
+/**
+ * Prepare I18N to enable all space travelers to understand instructions.
+ * 
+ *  @uses load_plugin_textdomain
+ *  @since Hyperdrive 1.0.0
+ *  @return void
+ */
+function calling_houston() {
+	load_plugin_textdomain( 'hyperdrive', false, dirname( plugin_basename(__FILE__) ) . '/languages/' );
+}
 
 /**
  * Prepare structured data for Fetch Injection.

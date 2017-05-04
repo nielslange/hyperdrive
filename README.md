@@ -4,6 +4,11 @@
 
 ![Hyperdrive for WordPress](https://github.com/wp-id/hyperdrive/blob/master/logo.png)
 
+# Documentation
+
+Hyperdrive docs available online at:
+https://clean-louse.cloudvent.net/
+
 # Todo before 1.0.0 release
 
 - [ ] Only dequeue scripts if [browser supports Fetch](http://caniuse.com/#search=fetch) for backwards compatibility with older browsers

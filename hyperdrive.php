@@ -38,7 +38,7 @@
 
 namespace hyperdrive;
 add_action('plugins_loaded', __NAMESPACE__ .'\calling_houston');
-add_action('wp_head', __NAMESPACE__ .'\calling_houston');
+add_action('wp_head', __NAMESPACE__ .'\engage');
 
 /**
  * Prepare I18N to enable all space travelers to understand instructions.

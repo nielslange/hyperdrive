@@ -3,7 +3,7 @@ Contributors: 3hartanto, ariffsetiawan, auraanar, ervannur, ipututoya, joedewawe
 Tags: optimize, javascript, async js, async javascript, speed
 Requires at least: 3.0
 Tested up to: 4.7.4
-Stable tag: 1.0
+Stable tag: 1.0.0
 License: GPL-3.0 or later
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -26,6 +26,6 @@ Please visit [the official repository](https://github.com/wp-id/hyperdrive) on G
 
 == Changelog ==
 
-### 1.0.0-beta (alias 0.9.0) ###
+### 1.0.0-beta ###
 
 * Initial beta pre-release for testing.

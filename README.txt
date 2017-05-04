@@ -1,5 +1,5 @@
 === Hyperdrive ===
-Contributors: jhabdas, nielslange, omrobbie, shantiscript, ariffsetiawan, ervannur, ipututoya, ariffsetiawan, auraanar, 3hartanto, ervannur, joedewaweb
+Contributors: jhabdas, nielslange, omrobbie, shantiscript, ariffsetiawan, ervannur, ipututoya, auraanar, 3hartanto, ervannur, joedewaweb
 Tags: optimize, javascript, async js, async javascript, speed
 Requires at least: 3.0
 Tested up to: 4.7.4
@@ -18,7 +18,7 @@ Using Fetch Injection will reduce perceived latency during page load when compar
 == Installation ==
 
 1. Place `hyperdrive` inside the `/wp-content/plugins/` directory
-2. Activate the plugin from from the WordPress Admin dashboard
+2. Activate the plugin from the WordPress Admin dashboard
 
 == Contributing ==
 

@@ -1,0 +1,24 @@
+{
+  "name": "hyperdrive",
+  "version": "1.0.0-beta",
+  "description": "The fastest way to load pages in WordPress.",
+  "author": "Josh Habdas <josh@habd.as> (https://habd.as/)",
+  "main": "hyperdrive.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "standard-version"
+  },
+  "repository": "wp-id/hyperdrive.git",
+  "keywords": [
+    "speed",
+    "optimization",
+    "javascript",
+    "performance",
+    "wordpress"
+  ],
+  "license": "GPL-3.0",
+  "private": true,
+  "devDependencies": {
+    "standard-version": "^4.0.0"
+  }
+}

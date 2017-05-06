@@ -1,6 +1,6 @@
 {
   "name": "hyperdrive",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta.0",
   "description": "The fastest way to load pages in WordPress.",
   "author": "Josh Habdas <josh@habd.as> (https://habd.as/)",
   "main": "hyperdrive.php",

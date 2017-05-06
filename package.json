@@ -20,5 +20,8 @@
   "private": true,
   "devDependencies": {
     "standard-version": "^4.0.0"
+  },
+  "dependencies": {
+    "fetch-inject": "^1.6.11"
   }
 }

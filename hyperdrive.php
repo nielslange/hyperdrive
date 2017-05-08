@@ -2,14 +2,15 @@
 /**
  * Putting WordPress into Hyperdrive.
  *
- * @package     Hyperdrive
- * @author      Josh Habdas and contributors
+ * @package     hyperdrive
+ * @author      Josh Habdas
  * @link        https://wordpress.stackexchange.com/a/263733/117731
  * @license     GPL-3.0 or later
  *
  * @wordpress-plugin
  * Plugin Name: Hyperdrive
  * Plugin URI:  https://github.com/wp-id/hyperdrive
+ * Author URI:  https://habd.as
  * Description: The fastest way to load pages in WordPress.
  * Version:     1.0.0-beta
  * Author:      Josh Habdas and contributors
@@ -290,6 +291,7 @@ function get_src_for_handle( $handle ) {
  *
  * @since Hyperdrive 1.0.0
  * @param string $handle The handle
+ * @return array(string) List of handles for dependencies of $handle
  */
 function get_deps_for_handle( $handle ) {
   $dep = get_dep_for_handle( $handle );

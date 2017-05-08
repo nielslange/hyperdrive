@@ -2,14 +2,15 @@
 /**
  * Putting WordPress into Hyperdrive.
  *
- * @package     Hyperdrive
- * @author      Josh Habdas and contributors
+ * @package     hyperdrive
+ * @author      Josh Habdas
  * @link        https://wordpress.stackexchange.com/a/263733/117731
  * @license     GPL-3.0 or later
  *
  * @wordpress-plugin
  * Plugin Name: Hyperdrive
  * Plugin URI:  https://github.com/wp-id/hyperdrive
+ * Author URI:  https://habd.as
  * Description: The fastest way to load pages in WordPress.
  * Version:     1.0.0-beta
  * Author:      Josh Habdas and contributors
@@ -185,11 +186,11 @@ function fold_spacetime( $antimatter_particles ) {
 (function () {
   if (!window.fetch) return;
   /**
-   * Fetch Inject v1.6.8
+   * Fetch Inject v1.6.11
    * Copyright (c) 2017 Josh Habdas
    * @licence ISC
    */
-  var fetchInject=function(){"use strict";const e=function(e,t,n,r,o,i,c){i=t.createElement(n),c=t.getElementsByTagName(n)[0],i.type=r.blob.type,i.appendChild(t.createTextNode(r.text)),i.onload=o(r),c?c.parentNode.insertBefore(i,c):t.head.appendChild(i)},t=function(t,n){if(!t||!Array.isArray(t))return Promise.reject(new Error("`inputs` must be an array"));if(n&&!(n instanceof Promise))return Promise.reject(new Error("`promise` must be a promise"));const r=[],o=n?[].concat(n):[],i=[];return t.forEach(e=>o.push(window.fetch(e).then(e=>{return[e.clone().text(),e.blob()]}).then(e=>{return Promise.all(e).then(e=>{r.push({text:e[0],blob:e[1]})})}))),Promise.all(o).then(()=>{return r.forEach(t=>{i.push({then:n=>{"text/css"===t.blob.type?e(window,document,"style",t,n):e(window,document,"script",t,n)}})}),Promise.all(i)})};return t}();
+  var fetchInject=function(){"use strict";const e=function(e,t,n,r,o,i,c){i=t.createElement(n),c=t.getElementsByTagName(n)[0],i.appendChild(t.createTextNode(r.text)),i.onload=o(r),c?c.parentNode.insertBefore(i,c):t.head.appendChild(i)},t=function(t,n){if(!t||!Array.isArray(t))return Promise.reject(new Error("`inputs` must be an array"));if(n&&!(n instanceof Promise))return Promise.reject(new Error("`promise` must be a promise"));const r=[],o=n?[].concat(n):[],i=[];return t.forEach(e=>o.push(window.fetch(e).then(e=>{return[e.clone().text(),e.blob()]}).then(e=>{return Promise.all(e).then(e=>{r.push({text:e[0],blob:e[1]})})}))),Promise.all(o).then(()=>{return r.forEach(t=>{i.push({then:n=>{"text/css"===t.blob.type?e(window,document,"style",t,n):e(window,document,"script",t,n)}})}),Promise.all(i)})};return t}();
   $fetch_inject_string;
 })();
 EOD;
@@ -304,6 +305,7 @@ function get_src_for_handle( $handle ) {
  *
  * @since Hyperdrive 1.0.0
  * @param string $handle The handle
+ * @return array(string) List of handles for dependencies of $handle
  */
 function get_deps_for_handle( $handle ) {
   $dep = get_dep_for_handle( $handle );
